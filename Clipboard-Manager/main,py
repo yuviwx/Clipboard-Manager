@@ -1,0 +1,23 @@
+# main.py
+from gui import ClipboardManagerGUI
+from core import ClipboardManagerCore
+
+
+def main():
+    gui = ClipboardManagerGUI()
+    core = ClipboardManagerCore(gui)
+
+    # connect GUI ↔ core
+    gui.set_core(core)
+
+    # install keyboard/mouse hooks
+    core.install_hooks()
+
+    try:
+        gui.run()
+    finally:
+        core.cleanup()
+
+
+if __name__ == "__main__":
+    main()
