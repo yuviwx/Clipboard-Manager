@@ -1,42 +1,47 @@
-# Clipboard Manager
+# 📋 Clipboard Manager (Tkinter GUI)
 
-A simple Python script that allows you to capture and store and export(Future) text copied to the clipboard.
+A user-friendly clipboard automation tool written in Python with a clean **GUI–Core** architecture.  
+Designed for quickly copying structured information (like invoice details) into a CSV file using double-click detection and hotkeys.
 
-## Features
+This is the **latest architecture**, matching your refactored version with OOP, 3-file layout, threading separation, undo, CSV creation, and existing-file selection.
 
-- **Toggle Copy Mode**: Easily switch between capturing and normal mode.
-- **Capture on Double-Click**: When in copy mode, double-clicking the mouse automatically copies the selected text and appends it to a list.
-- **Non-blocking Operation**: The script uses multithreading to listen for mouse and keyboard events without blocking the main program flow.
-- **Easy Exit**: Press `ESC` to gracefully exit the application.
+---
 
-## How it Works
+## 🚀 Features
 
-The application uses a multithreaded approach to handle user input. The `main` function sets up global keyboard and mouse hooks to listen for specific events.
+### 🖱 Clipboard Automation
+- **Double-click to copy**: While in Copy Mode, any double-click anywhere copies the selected text and sends it to the next empty field.
+- **Shift + 1** toggles Copy Mode **ON/OFF**.
+- **ESC** cleanly exits the application.
 
-- A keyboard hotkey (`Shift+1`) is configured to toggle the `copy_mode`.
-- Another hotkey (`ESC`) is used to set an `exit_event`, signaling the main thread to terminate.
-- A double-click mouse event is hooked to the `on_mouse` function, which, when `copy_mode` is active, triggers a copy operation and appends the content to a list.
+### 📝 & 💾 GUI Features
+- **Smart Form Filling** - Each field has its own label and undo button. All fields reset after every successful “SEND”.
+- **Intelligent CSV Handling** - Automatically creates or opens a CSV on the first “SEND”, with header columns matching your form fields.
+- **Menu bar** - Includes options to create/open a CSV file, view instructions, or open the contact dialog.
 
-### Multithreading and Thread Communication
 
-This script leverages Python's `threading` module to achieve its non-blocking behavior.
+### 🧵 Multi-Threading Architecture
+- Runs in a **multi-threaded environment** with clear separation of concerns:
+  - Background threads created by `keyboard` and `mouse` libraries handle system-level hooks.
+  - The Tkinter main thread manages all GUI updates.
+- A **thread lock** protects the shared field queue.
+- Thread communication is done through a `queue`, `shared state`, and a `threading.Event`. 
 
-- The `keyboard` and `mouse` libraries internally create separate threads to monitor input events. This allows the main program to "idle" (`exit_event.wait()`) while the event-driven callbacks (like `on_mouse` and `toggle_copy`) are executed on these background threads.
-- **Thread Communication** is managed through global variables and a `threading.Event` object.
-    - The `copy_mode` global variable acts as a flag that is toggled by the `toggle_copy` function and read by the `on_mouse` function.
-    - The `exit_event` is a thread-safe way to signal from the keyboard thread (via `request_exit`) to the main thread that the program should terminate. This is a clean method for thread synchronization, ensuring a proper cleanup.
+### 📦 Clean 3-File OOP Structure
 
-## Requirements
+```
+project/
+├── gui.py     → Tkinter GUI (widgets, menu, fields, buttons)
+├── core.py    → Logic (copy mode, hooks, queue, CSV I/O)
+└── main.py    → Application entry point and wiring
+```
 
-The following Python libraries are required to run this script:
+---
 
-- `keyboard`: For listening to and handling global keyboard events.
-- `mouse`: For listening to and handling global mouse events.
-- `pyperclip`: For interacting with the system clipboard.
-- `threading`: A built-in Python library used for creating and managing threads.
-- `time`: A built-in Python library for time-related functions, used here to introduce a small delay.
+## 🧩 Future Ideas
 
-You can install the required external libraries using `pip`:
-
-```bash
-pip install keyboard mouse pyperclip
+- Status bar: show “Copy Mode ON/OFF”
+- Track which field is currently active  
+- Add theme selection / dark mode  
+- Add small pop window for minimize state  
+- Add config file for persistent preferences  
