@@ -19,13 +19,14 @@ This is the **latest architecture**, matching your refactored version with OOP, 
 - **Intelligent CSV Handling** - Automatically creates or opens a CSV on the first “SEND”, with header columns matching your form fields.
 - **Menu bar** - Includes options to create/open a CSV file, view instructions, or open the contact dialog.
 
+## 💡 Coding Skills Demonstrated
 
 ### 🧵 Multi-Threading Architecture
 - Runs in a **multi-threaded environment** with clear separation of concerns:
   - Background threads created by `keyboard` and `mouse` libraries handle system-level hooks.
   - The Tkinter main thread manages all GUI updates.
 - A **thread lock** protects the shared field queue.
-- Thread communication is done through a `queue`, `shared state`, and a `threading.Event`. 
+- **Thread communication** is done through a `queue`, `shared state`, and a `threading.Event`. 
 
 ### 📦 Clean 3-File OOP Structure
 
