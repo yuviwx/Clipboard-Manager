@@ -1,7 +1,9 @@
 #-------------------------- GUI - tkinter ------------------------------------------
 
 import tkinter as tk
-from tkinter import LEFT, RIGHT
+from tkinter import messagebox
+from tkinter import filedialog
+
 
 help_text = ("Instructions:\n\n"
              "1. Press Shift + 1 to toggle Copy Mode ON/OFF.\n"
@@ -15,7 +17,7 @@ help_text = ("Instructions:\n\n"
 class ClipboardManagerGUI:
     def __init__(self):
         self.root = self._create_root()
-        self._build_menu()
+        self.menu = self._build_menu()
         self._create_title()
         self.icon_image = self._load_icon()
 
@@ -23,11 +25,14 @@ class ClipboardManagerGUI:
         self.text_fields = self._create_form_fields()
         self.send_button = self._create_send_button()
 
-        #self.core - None  # to be set later
+        self.core = None  # to be set later
 
     def set_core(self, core):
         """Connect core logic after both objects are created"""
         self.core = core
+
+        # wire exit handling
+        self.root.protocol("WM_DELETE_WINDOW", self.core.request_exit) # handle window close button
 
         # wire UNDO buttons
         for field in self.text_fields:
@@ -39,7 +44,7 @@ class ClipboardManagerGUI:
             )
 
         # wire SEND button
-        self.send_button.config(command=None)  # to be implemented
+        self.send_button.config(command=self.core.on_send)
 
     def run(self):
         self.root.mainloop()
@@ -59,10 +64,10 @@ class ClipboardManagerGUI:
         # Adding File Menu and commands
         file = tk.Menu(menubar, tearoff = 0)
         menubar.add_cascade(label ='File', menu = file)
-        file.add_command(label ='New CVS', command = None)
-        file.add_command(label ='Open CVS', command = None)
+        file.add_command(label ='New CVS', command = self._menu_new_csv)
+        file.add_command(label ='Open CVS', command = self._menu_open_csv)
         file.add_separator()
-        file.add_command(label ='Exit', command = None)
+        file.add_command(label ='Exit', command = self.root.destroy)
 
         # Adding Help Menu
         help_ = tk.Menu(menubar, tearoff = 0)
@@ -71,9 +76,11 @@ class ClipboardManagerGUI:
         help_.add_command(label ='Contact Roncha', command = None)
 
         self.root.config(menu = menubar)
+
+        return menubar
     
     def _show_help(self):
-        tk.messagebox.showinfo("Help", help_text)
+        messagebox.showinfo("Help", help_text)
 
     def _create_title(self):
         title = tk.Label(
@@ -170,6 +177,19 @@ class ClipboardManagerGUI:
 
         send_btn.grid(row=14, column=0, columnspan=3, padx=20, pady=22, sticky="ew")          
         return send_btn
+    
+    def _menu_new_csv(self):
+        if self.core is None:
+            tk.messagebox.showerror("Not ready", "Core is not initialized yet.")
+            return
+        self.core.new_csv_file()
+
+    def _menu_open_csv(self):
+        if self.core is None:
+            tk.messagebox.showerror("Not ready", "Core is not initialized yet.")
+            return
+        self.core.open_csv_file()
+
     
 # #test
 # gui = ClipboardManagerGUI()
