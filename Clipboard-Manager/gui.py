@@ -2,7 +2,6 @@
 
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import filedialog
 
 
 help_text = ("Instructions:\n\n"
@@ -10,7 +9,7 @@ help_text = ("Instructions:\n\n"
              "2. When Copy Mode is ON, double-clicking the mouse will copy the selected text\n"
              "   and paste it into the next available field in the form.\n"
              "3. To undo the last entry in a field, click the undo button next to it.\n"
-             "4. Press send to submit the form and export to cvs file.\n"
+             "4. Press send to submit the form and export to CSV file.\n"
              "   each time you press send, a new entry will be appended.\n"
              "5. Press Esc to exit the application.\n")
 
@@ -64,8 +63,8 @@ class ClipboardManagerGUI:
         # Adding File Menu and commands
         file = tk.Menu(menubar, tearoff = 0)
         menubar.add_cascade(label ='File', menu = file)
-        file.add_command(label ='New CVS', command = self._menu_new_csv)
-        file.add_command(label ='Open CVS', command = self._menu_open_csv)
+        file.add_command(label ='New CSV', command = self._menu_new_csv)
+        file.add_command(label ='Open CSV', command = self._menu_open_csv)
         file.add_separator()
         file.add_command(label ='Exit', command = self.root.destroy)
 
@@ -180,13 +179,13 @@ class ClipboardManagerGUI:
     
     def _menu_new_csv(self):
         if self.core is None:
-            tk.messagebox.showerror("Not ready", "Core is not initialized yet.")
+            messagebox.showerror("Not ready", "Core is not initialized yet.")
             return
         self.core.new_csv_file()
 
     def _menu_open_csv(self):
         if self.core is None:
-            tk.messagebox.showerror("Not ready", "Core is not initialized yet.")
+            messagebox.showerror("Not ready", "Core is not initialized yet.")
             return
         self.core.open_csv_file()
 

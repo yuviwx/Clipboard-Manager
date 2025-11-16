@@ -1,7 +1,7 @@
 #-------------------------- core - keyboard, mouse, clipboard --------------------------
 
 import keyboard, mouse, pyperclip, time, threading, csv, os
-import tkinter.messagebox as messagebox
+from tkinter import messagebox
 import tkinter.filedialog as filedialog
 
 class ClipboardManagerCore:
